@@ -5,14 +5,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WikidataConnector implements Connector {
 
   public static final String URL = "https://www.wikidata.org/wiki/Special:EntityData/";
 
-  // .json, .rdf, .ttl or .nt
-
+  @Override
   public String getRdf(String entity, String type) throws IOException {
+    if (!availableType(type)) {
+      // manage unsupported type
+      return null;
+    }
     URL url = new URL(URL + entity + "." + type);
     HttpURLConnection con = (HttpURLConnection) url.openConnection();
     con.setRequestMethod("GET");
@@ -24,7 +29,29 @@ public class WikidataConnector implements Connector {
       content.append(inputLine);
     }
     in.close();
+    if (content.toString().contains("Not Found")) {
+      return "Not Found";
+    }
     return content.toString();
+  }
+
+  @Override
+  public boolean availableType(String type) {
+    for (WikidataAcceptedTypes val : WikidataAcceptedTypes.values()) {
+      if (val.name().equals(type)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public List<String> acceptedTypes() {
+    List<String> ret = new ArrayList<>();
+    for (WikidataAcceptedTypes val : WikidataAcceptedTypes.values()) {
+      ret.add(val.name());
+    }
+    return ret;
   }
 
 }

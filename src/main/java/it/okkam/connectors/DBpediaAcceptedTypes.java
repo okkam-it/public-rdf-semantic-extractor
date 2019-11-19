@@ -1,13 +1,17 @@
 package it.okkam.connectors;
 
-public class DBpediaAcceptedTypes {
+public enum DBpediaAcceptedTypes {
+  NTRIPLES("ntriples"), N3("n3"), TURTLE("ttl"), JSON("json"), XML("rdf"), ATOM("atom"), JSOD(
+      "jsod");
 
-  public static final String NTRIPLES = "ntriples";
-  public static final String N3 = "n3";
-  public static final String TURTLE = "ttl";
-  public static final String JSON = "json";
-  public static final String XML = "rdf";
+  private String extension;
 
-  public static final String ATOM = "atom";
-  public static final String JSOD = "jsod";
+  private DBpediaAcceptedTypes(String extension) {
+    this.extension = extension;
+  }
+
+  public String getExtension() {
+    return extension;
+  }
+
 }
