@@ -1,7 +1,7 @@
-package it.okkam.connectors;
+package it.okkam.enums;
 
 public enum DBpediaAcceptedTypes {
-  NTRIPLES("ntriples"), N3("n3"), TURTLE("ttl"), JSON("json"), XML("rdf"), ATOM("atom"), JSOD(
+  NTRIPLES("ntriples"), N3("n3"), TURTLE("ttl"), JSON("json"), XML_RDF("rdf"), ATOM("atom"), JSOD(
       "jsod");
 
   private String extension;

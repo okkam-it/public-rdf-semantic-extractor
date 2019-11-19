@@ -1,7 +1,7 @@
-package it.okkam.connectors;
+package it.okkam.enums;
 
 public enum GeonamesAcceptedTypes {
-  XML("rdf");
+  XML_RDF("rdf");
 
   private String extension;
 

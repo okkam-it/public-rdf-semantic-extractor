@@ -1,7 +1,7 @@
-package it.okkam.connectors;
+package it.okkam.enums;
 
 public enum WikidataAcceptedTypes {
-  NTRIPLES("nt"), N3("n3"), TURTLE("ttl"), JSON("json"), XML("rdf");
+  NTRIPLES("nt"), N3("n3"), TURTLE("ttl"), JSON("json"), XML_RDF("rdf");
 
   private String extension;
 

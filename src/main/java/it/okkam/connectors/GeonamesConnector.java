@@ -1,5 +1,7 @@
 package it.okkam.connectors;
 
+import it.okkam.enums.GeonamesAcceptedTypes;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

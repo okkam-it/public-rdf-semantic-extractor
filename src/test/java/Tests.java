@@ -1,6 +1,6 @@
-import it.okkam.connectors.DBpediaAcceptedTypes;
-import it.okkam.connectors.GeonamesAcceptedTypes;
-import it.okkam.connectors.WikidataAcceptedTypes;
+import it.okkam.enums.DBpediaAcceptedTypes;
+import it.okkam.enums.GeonamesAcceptedTypes;
+import it.okkam.enums.WikidataAcceptedTypes;
 
 import java.io.IOException;
 
@@ -25,8 +25,8 @@ public class Tests {
   @Test
   public void processGeonames() throws IOException {
     ExtractionUtils ext = new ExtractionUtils();
-    System.out
-        .println(ext.get("http://sws.geonames.org/1261700", GeonamesAcceptedTypes.XML.toString()));
+    System.out.println(
+        ext.get("http://sws.geonames.org/1261700", GeonamesAcceptedTypes.XML_RDF.toString()));
   }
 
 }
