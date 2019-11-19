@@ -18,7 +18,8 @@ public class GeonamesConnector implements Connector {
       // manage unsupported type
       return null;
     }
-    URL url = new URL(URL + entity + "/about." + type);
+    URL url =
+        new URL(URL + entity + "/about." + GeonamesAcceptedTypes.valueOf(type).getExtension());
     HttpURLConnection con = (HttpURLConnection) url.openConnection();
     con.setRequestMethod("GET");
 

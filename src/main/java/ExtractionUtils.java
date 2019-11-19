@@ -1,17 +1,29 @@
+import it.okkam.connectors.Connector;
+import it.okkam.connectors.DBpediaConnector;
+import it.okkam.connectors.GeonamesConnector;
+import it.okkam.connectors.WikidataConnector;
+
+import java.io.IOException;
+
 public class ExtractionUtils {
 
-  public static String DBPEDIA = "dbpedia.org";
-  public static String WIKIDATA = "www.wikidata.org";
-  public static String GEONAMES = "sws.geonames.org";
+  public static final String DBPEDIA = "dbpedia.org";
+  public static final String WIKIDATA = "www.wikidata.org";
+  public static final String GEONAMES = "sws.geonames.org";
 
-  public String extract(String toExtract) {
-    String source = extractSource(toExtract);
+  public String get(String toGet, String type) throws IOException {
+    String source = extractSource(toGet);
+    String entity = extractEntity(toGet);
+    Connector connector;
     if (source.equals(DBPEDIA)) {
-      return extractEntity(toExtract);
+      connector = new DBpediaConnector();
+      return connector.getRdf(entity, type);
     } else if (source.equals(WIKIDATA)) {
-      return extractEntity(toExtract);
+      connector = new WikidataConnector();
+      return connector.getRdf(entity, type);
     } else if (source.equals(GEONAMES)) {
-      return extractEntity(toExtract);
+      connector = new GeonamesConnector();
+      return connector.getRdf(entity, type);
     }
     return "source not yet implemented";
   }

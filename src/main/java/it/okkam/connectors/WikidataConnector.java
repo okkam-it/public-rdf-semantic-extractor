@@ -18,7 +18,7 @@ public class WikidataConnector implements Connector {
       // manage unsupported type
       return null;
     }
-    URL url = new URL(URL + entity + "." + type);
+    URL url = new URL(URL + entity + "." + WikidataAcceptedTypes.valueOf(type).getExtension());
     HttpURLConnection con = (HttpURLConnection) url.openConnection();
     con.setRequestMethod("GET");
 
