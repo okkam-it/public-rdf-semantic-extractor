@@ -14,7 +14,7 @@ public class Tests {
   public void processDbpedia()
       throws IOException, UnsupportedTypeException, EntityNotFoundException {
     ExtractionUtils ext = new ExtractionUtils();
-    System.out.println(ext.get("http://dbpedia.org/resource/Pier_Paolo_Pasolini",
+    System.out.println(ext.getEntity("http://dbpedia.org/resource/Pier_Paolo_Pasolini",
         DBpediaAcceptedTypes.JSON.toString()));
   }
 
@@ -23,7 +23,7 @@ public class Tests {
       throws IOException, UnsupportedTypeException, EntityNotFoundException {
     ExtractionUtils ext = new ExtractionUtils();
     System.out.println(
-        ext.get("https://www.wikidata.org/wiki/Q25120", WikidataAcceptedTypes.JSON.toString()));
+        ext.getEntity("https://www.wikidata.org/wiki/Q25120", WikidataAcceptedTypes.JSON.toString()));
   }
 
   @Test
@@ -31,21 +31,21 @@ public class Tests {
       throws IOException, UnsupportedTypeException, EntityNotFoundException {
     ExtractionUtils ext = new ExtractionUtils();
     System.out.println(
-        ext.get("http://sws.geonames.org/1261700", GeonamesAcceptedTypes.XML_RDF.toString()));
+        ext.getEntity("http://sws.geonames.org/1261700", GeonamesAcceptedTypes.XML_RDF.toString()));
   }
 
   @Test(expected = UnsupportedTypeException.class)
   public void processGeonamesWrongType()
       throws IOException, UnsupportedTypeException, EntityNotFoundException {
     ExtractionUtils ext = new ExtractionUtils();
-    System.out.println(ext.get("http://sws.geonames.org/1261700", "abc"));
+    System.out.println(ext.getEntity("http://sws.geonames.org/1261700", "abc"));
   }
 
   @Test(expected = EntityNotFoundException.class)
   public void processWikidataEntityNotFound()
       throws IOException, UnsupportedTypeException, EntityNotFoundException {
     ExtractionUtils ext = new ExtractionUtils();
-    System.out.println(ext.get("https://www.wikidata.org/wiki/Q251203462773",
+    System.out.println(ext.getEntity("https://www.wikidata.org/wiki/Q251203462773",
         WikidataAcceptedTypes.JSON.toString()));
   }
 

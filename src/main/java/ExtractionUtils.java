@@ -9,28 +9,28 @@ import java.io.IOException;
 
 public class ExtractionUtils {
 
-  public static final String DBPEDIA = "dbpedia.org";
-  public static final String WIKIDATA = "www.wikidata.org";
-  public static final String GEONAMES = "sws.geonames.org";
+  private static final String DBPEDIA = "dbpedia.org";
+  private static final String WIKIDATA = "www.wikidata.org";
+  private static final String GEONAMES = "sws.geonames.org";
 
-  public String get(String toGet, String type)
+  public String getEntity(String url, String type)
       throws IOException, UnsupportedTypeException, EntityNotFoundException {
-    RequestInfo info = extract(toGet);
-    Connector connector;
+    RequestInfo info = extractInfo(url);
+    Connector connector = null;
     if (info.getSource().equals(DBPEDIA)) {
       connector = new DBpediaConnector();
-      return connector.getEntity(info.getEntity(), type);
     } else if (info.getSource().equals(WIKIDATA)) {
       connector = new WikidataConnector();
-      return connector.getEntity(info.getEntity(), type);
     } else if (info.getSource().equals(GEONAMES)) {
       connector = new GeonamesConnector();
+    }
+    if (connector != null && connector.isAlive()) {
       return connector.getEntity(info.getEntity(), type);
     }
     return "source not yet implemented";
   }
 
-  public RequestInfo extract(String url) {
+  private RequestInfo extractInfo(String url) {
     RequestInfo ret = new RequestInfo();
     ret.setEntity(url.split("\\/")[url.split("\\/").length - 1]);
     ret.setSource(url.split("\\/\\/")[1].split("\\/")[0]);
