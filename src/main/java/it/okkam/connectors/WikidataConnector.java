@@ -3,6 +3,8 @@ package it.okkam.connectors;
 import it.okkam.enums.WikidataAcceptedTypes;
 import it.okkam.exceptions.EntityNotFoundException;
 import it.okkam.exceptions.UnsupportedTypeException;
+import it.okkam.extractor.RequestInfo;
+import it.okkam.extractor.RequestResponse;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,17 +20,18 @@ public class WikidataConnector implements Connector {
   public static final String NAME = "Wikidata";
 
   @Override
-  public String getEntity(String entity, String type)
+  public RequestResponse getEntity(RequestInfo info)
       throws IOException, UnsupportedTypeException, EntityNotFoundException {
-    if (!availableType(type)) {
-      throw new UnsupportedTypeException(NAME, type);
+    if (!availableType(info.getType())) {
+      throw new UnsupportedTypeException(NAME, info.getType());
     }
-    URL url = new URL(URL + entity + "." + WikidataAcceptedTypes.valueOf(type).getExtension());
+    URL url = new URL(URL + info.getEntity() + "."
+        + WikidataAcceptedTypes.valueOf(info.getType()).getExtension());
     HttpURLConnection con = (HttpURLConnection) url.openConnection();
     con.setRequestMethod("GET");
 
     if (con.getResponseCode() == 400) {
-      throw new EntityNotFoundException(entity, NAME);
+      throw new EntityNotFoundException(info.getEntity(), NAME);
     }
     BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
     String inputLine;
@@ -37,7 +40,10 @@ public class WikidataConnector implements Connector {
       content.append(inputLine);
     }
     in.close();
-    return content.toString();
+    RequestResponse resp = new RequestResponse();
+    resp.setInfo(info);
+    resp.setBody(content.toString());
+    return resp;
   }
 
   @Override

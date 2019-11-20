@@ -1,3 +1,5 @@
+package it.okkam.extractor;
+
 import it.okkam.connectors.Connector;
 import it.okkam.connectors.DBpediaConnector;
 import it.okkam.connectors.GeonamesConnector;
@@ -7,15 +9,16 @@ import it.okkam.exceptions.UnsupportedTypeException;
 
 import java.io.IOException;
 
-public class ExtractionUtils {
+public class Requester {
 
   private static final String DBPEDIA = "dbpedia.org";
   private static final String WIKIDATA = "www.wikidata.org";
   private static final String GEONAMES = "sws.geonames.org";
 
-  public String getEntity(String url, String type)
+  public RequestResponse getEntity(String url, String type)
       throws IOException, UnsupportedTypeException, EntityNotFoundException {
     RequestInfo info = extractInfo(url);
+    info.setType(type);
     Connector connector = null;
     if (info.getSource().equals(DBPEDIA)) {
       connector = new DBpediaConnector();
@@ -25,9 +28,12 @@ public class ExtractionUtils {
       connector = new GeonamesConnector();
     }
     if (connector != null && connector.isAlive()) {
-      return connector.getEntity(info.getEntity(), type);
+      return connector.getEntity(info);
     }
-    return "source not yet implemented";
+    RequestResponse ret = new RequestResponse();
+    ret.setInfo(info);
+    ret.setBody("source not yet implemented");
+    return ret;
   }
 
   private RequestInfo extractInfo(String url) {

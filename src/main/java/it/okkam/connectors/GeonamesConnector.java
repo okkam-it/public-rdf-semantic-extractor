@@ -2,6 +2,8 @@ package it.okkam.connectors;
 
 import it.okkam.enums.GeonamesAcceptedTypes;
 import it.okkam.exceptions.UnsupportedTypeException;
+import it.okkam.extractor.RequestInfo;
+import it.okkam.extractor.RequestResponse;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,12 +19,12 @@ public class GeonamesConnector implements Connector {
   public static final String NAME = "Geonames";
 
   @Override
-  public String getEntity(String entity, String type) throws IOException, UnsupportedTypeException {
-    if (!availableType(type)) {
-      throw new UnsupportedTypeException(NAME, type);
+  public RequestResponse getEntity(RequestInfo info) throws IOException, UnsupportedTypeException {
+    if (!availableType(info.getType())) {
+      throw new UnsupportedTypeException(NAME, info.getType());
     }
-    URL url =
-        new URL(URL + entity + "/about." + GeonamesAcceptedTypes.valueOf(type).getExtension());
+    URL url = new URL(URL + info.getEntity() + "/about."
+        + GeonamesAcceptedTypes.valueOf(info.getType()).getExtension());
     HttpURLConnection con = (HttpURLConnection) url.openConnection();
     con.setRequestMethod("GET");
 
@@ -33,7 +35,10 @@ public class GeonamesConnector implements Connector {
       content.append(inputLine);
     }
     in.close();
-    return content.toString();
+    RequestResponse resp = new RequestResponse();
+    resp.setInfo(info);
+    resp.setBody(content.toString());
+    return resp;
   }
 
   @Override
