@@ -15,4 +15,6 @@ public interface Connector {
 
   public List<String> acceptedTypes();
 
+  public boolean isAlive() throws IOException;
+
 }

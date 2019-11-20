@@ -54,4 +54,12 @@ public class DBpediaConnector implements Connector {
     return ret;
   }
 
+  @Override
+  public boolean isAlive() throws IOException {
+    URL url = new URL(URL);
+    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+    con.setRequestMethod("GET");
+    return con.getResponseCode() == 400;
+  }
+
 }
