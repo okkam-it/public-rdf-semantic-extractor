@@ -1,6 +1,8 @@
 package it.okkam.connectors;
 
 import it.okkam.enums.WikidataAcceptedTypes;
+import it.okkam.exceptions.EntityNotFoundException;
+import it.okkam.exceptions.UnsupportedTypeException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,17 +15,21 @@ import java.util.List;
 public class WikidataConnector implements Connector {
 
   public static final String URL = "https://www.wikidata.org/wiki/Special:EntityData/";
+  public static final String NAME = "Wikidata";
 
   @Override
-  public String getRdf(String entity, String type) throws IOException {
+  public String getEntity(String entity, String type)
+      throws IOException, UnsupportedTypeException, EntityNotFoundException {
     if (!availableType(type)) {
-      // manage unsupported type
-      return null;
+      throw new UnsupportedTypeException(NAME, type);
     }
     URL url = new URL(URL + entity + "." + WikidataAcceptedTypes.valueOf(type).getExtension());
     HttpURLConnection con = (HttpURLConnection) url.openConnection();
     con.setRequestMethod("GET");
 
+    if (con.getResponseCode() == 400) {
+      throw new EntityNotFoundException(entity, NAME);
+    }
     BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
     String inputLine;
     StringBuilder content = new StringBuilder();
@@ -31,9 +37,6 @@ public class WikidataConnector implements Connector {
       content.append(inputLine);
     }
     in.close();
-    if (content.toString().contains("Not Found")) {
-      return "Not Found";
-    }
     return content.toString();
   }
 

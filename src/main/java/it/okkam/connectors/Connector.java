@@ -1,11 +1,15 @@
 package it.okkam.connectors;
 
+import it.okkam.exceptions.EntityNotFoundException;
+import it.okkam.exceptions.UnsupportedTypeException;
+
 import java.io.IOException;
 import java.util.List;
 
 public interface Connector {
 
-  public String getRdf(String entity, String type) throws IOException;
+  public String getEntity(String entity, String type)
+      throws IOException, UnsupportedTypeException, EntityNotFoundException;
 
   public boolean availableType(String type);
 

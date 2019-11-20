@@ -1,6 +1,7 @@
 package it.okkam.connectors;
 
 import it.okkam.enums.DBpediaAcceptedTypes;
+import it.okkam.exceptions.UnsupportedTypeException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,12 +14,12 @@ import java.util.List;
 public class DBpediaConnector implements Connector {
 
   public static final String URL = "http://dbpedia.org/data/";
+  public static final String NAME = "DBpedia";
 
   @Override
-  public String getRdf(String entity, String type) throws IOException {
+  public String getEntity(String entity, String type) throws IOException, UnsupportedTypeException {
     if (!availableType(type)) {
-      // manage unsupported type
-      return null;
+      throw new UnsupportedTypeException(NAME, type);
     }
     URL url = new URL(URL + entity + "." + DBpediaAcceptedTypes.valueOf(type).getExtension());
     HttpURLConnection con = (HttpURLConnection) url.openConnection();
